@@ -1,5 +1,7 @@
 #!/bin/bash
 
+START_TIME=$SECONDS
+
 # Update package index
 apt-get update
 
@@ -63,10 +65,6 @@ nala install -y neofetch
 clear
 history -c
 
-# Notify ntfy server that the script installation is complete
-curl -H "Title: Script Install" -d "Script is voltooid op $(hostname)" https://ntfy.dinandserver.duckdns.org/phone
-
-
 # ! Definieer kleurcodes
 BLUE='\033[1;34m'
 GREEN='\033[1;32m'
@@ -86,3 +84,9 @@ echo -e "- Neofetch geïnstalleerd via nala"
 echo -e "- Systeem opgeschoond en geschiedenis gewist${RESET}"
 
 echo "Je kunt nu Docker, SSH, Nala en Neofetch gebruiken."
+# Calculate total execution time
+END_TIME=$SECONDS
+DURATION=$((END_TIME - START_TIME))
+
+# Notify ntfy server that the script is complete, including duration
+curl -H "Title: Script Voltooid" -d "Script is voltooid op $(hostname) in ${DURATION} seconden." https://ntfy.dinandserver.duckdns.org/phone
